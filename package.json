@@ -1,0 +1,21 @@
+{
+  "name": "mono-repo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:client": "yarn workspace client dev",
+    "dev:server": "yarn workspace server dev",
+    "dev": "concurrently \"yarn dev:client\" \"yarn dev:server\""
+  },
+  "devDependencies": {
+    "concurrently": "^6.x"
+  },
+  "author": "Manish Singh",
+  "license": "ISC"
+}

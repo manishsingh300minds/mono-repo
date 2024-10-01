@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",                // CommonJS for Node.js; can be overridden in subprojects
+    "target": "es6",                     // ES6 target for modern JavaScript
+    "lib": ["es6", "dom"],               // Include ES6 and DOM libraries (can be overridden per project)
+    "moduleResolution": "node",          // Node.js-style module resolution
+    "esModuleInterop": true,             // Interop between CommonJS and ES Modules
+    "forceConsistentCasingInFileNames": true,  // Enforce consistent file name casing
+    "strict": true,                      // Enable strict type checking
+    "skipLibCheck": true,                // Skip type checks on declaration files for faster builds
+    "resolveJsonModule": true,           // Allow importing of JSON files
+    "noEmit": true,                      // Disable emitting compiled files in the root
+    "baseUrl": ".",                      // Base URL for resolving non-relative module names
+    "paths": {
+      "@server/*": ["apps/server/src/*"],  // Path alias for server code
+      "@client/*": ["apps/client/src/*"]   // Path alias for client code
+    }
+  },
+  "exclude": [
+    "node_modules",                      // Exclude node_modules from root build
+    "dist",                              // Exclude output directories
+    "build",
+    "**/*.spec.ts"                       // Exclude test files from global compilation
+  ],
+  "references": [
+    { "path": "./apps/client" },         // Reference client subproject
+    { "path": "./apps/server" }          // Reference server subproject
+  ]
+}
