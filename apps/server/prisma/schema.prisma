@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  product_id    Int      @id @default(autoincrement())
+  sku           String   @unique @db.VarChar(50)
+  name          String   @db.VarChar(255)
+  description   String?  @db.Text
+  category_id   Int
+  supplier_id   Int
+  unit_price    Decimal  @db.Decimal(10, 2)
+  cost_price    Decimal? @db.Decimal(10, 2)
+  reorder_level Int?
+  discontinued  Boolean  @default(false)
+  created_at    DateTime @default(now()) @db.DateTime(0)
+  updated_at    DateTime @default(now()) @db.DateTime(0)
+
+  Category Category @relation(fields: [category_id], references: [category_id])
+  Supplier Supplier @relation(fields: [supplier_id], references: [supplier_id])
+}
+
+model Category {
+  category_id Int      @id @default(autoincrement())
+  name        String   @db.VarChar(255)
+  description String?  @db.Text
+  created_at  DateTime @default(now()) @db.DateTime(0)
+  updated_at  DateTime @default(now()) @db.DateTime(0)
+
+  products Product[]
+}
+
+model Supplier {
+  supplier_id  Int      @id @default(autoincrement())
+  name         String   @db.VarChar(255)
+  contact_name String?  @db.VarChar(255)
+  address      String?  @db.VarChar(255)
+  city         String?  @db.VarChar(100)
+  state        String?  @db.VarChar(100)
+  postal_code  String?  @db.VarChar(20)
+  country      String?  @db.VarChar(100)
+  phone        String?  @db.VarChar(50)
+  email        String?  @db.VarChar(100)
+  created_at   DateTime @default(now()) @db.DateTime(0)
+  updated_at   DateTime @default(now()) @db.DateTime(0)
+
+  products Product[]
+}

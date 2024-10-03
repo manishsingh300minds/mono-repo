@@ -1,15 +1,16 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import routes from "./src/routes";
 
-// Create an Express app
-const app = express();
-
-// Use environment variable PORT or default to 3000
+dotenv.config();
 const port = process.env.PORT || 3000;
 
-// Define a route for the root URL
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello from Express');
-});
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.use('/v1', routes);
 
 // Start the Express server and listen on the specified port
 app.listen(port, () => {

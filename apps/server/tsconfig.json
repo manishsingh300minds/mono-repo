@@ -7,13 +7,13 @@
     "lib": ["es6"],              // Include ES6 library features
     "moduleResolution": "node",  // Resolve modules like Node.js
     "outDir": "./dist",          // Output directory for compiled JS
-    "rootDir": "./src",  
+    "rootDir": "",  
     "noEmit": false,        // Root directory for TypeScript source files
     "esModuleInterop": true,     // Enable interoperability with CommonJS modules
     "forceConsistentCasingInFileNames": true,  // Ensure file names are treated case-sensitively
     "skipLibCheck": true,        // Skip checking declaration files for faster builds
     "strict": true               // Enable strict type-checking options
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*","prisma/**/*"],
   "exclude": ["node_modules"]    // Exclude node_modules from the compilation
 }
