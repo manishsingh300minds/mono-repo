@@ -1,7 +1,7 @@
-import { Request, Response } from 'express';
-import prisma from '../../prisma';
+import { Request, Response } from "express";
+import db from "../../db";
 
 export const getCategories = async (req: Request, res: Response) => {
-  const categories = await prisma.category.findMany();
-  res.json(categories);
+	const categories = await db.category.findMany();
+	res.json(categories);
 };

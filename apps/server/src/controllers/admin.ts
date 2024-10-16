@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import db from "../../prisma";
+import db from "../../db";
 import { hash, hashCompare } from "../utils/hash";
 import { generateToken } from "../utils/jwt";
 import {
@@ -21,17 +21,19 @@ export const login = async (req: Request, res: Response) => {
 		});
 
 		if (!admin) {
-			return errorResponseWithoutData({res,message: "Invalid email"});
+			return errorResponseWithoutData({ res, message: "Invalid email" });
 		}
 
 		const is_password_valid = await hashCompare(password, admin.password);
 		if (!is_password_valid) {
-			return errorResponseWithoutData({res,message: "Invalid password"});
+			return errorResponseWithoutData({ res, message: "Invalid password" });
 		}
 
 		const token = generateToken({
 			admin_id: admin.admin_id,
 			email: admin.email,
+			first_name: admin.first_name,
+			last_name: admin.last_name,
 		});
 
 		return successResponseData({
@@ -43,13 +45,13 @@ export const login = async (req: Request, res: Response) => {
 				last_name: admin.last_name,
 			},
 			message: "Login Successful",
-			extras: {token}
+			extras: { token },
 		});
 	} catch (error) {
 		if (error instanceof Error) {
 			console.error("Error message:", error.message); // Log error message safely
 		}
-		return internalServerErrorResponse(res)
+		return internalServerErrorResponse(res);
 	}
 };
 
@@ -73,11 +75,15 @@ export const createAdmin = async (req: Request, res: Response) => {
 			},
 		});
 
-		return successResponseData({res, data: admin, status: ResponseCode.SUCCESS_NEW_RESOURCE});
+		return successResponseData({
+			res,
+			data: admin,
+			status: ResponseCode.SUCCESS_NEW_RESOURCE,
+		});
 	} catch (error) {
 		if (error instanceof Error) {
 			console.error("Error message:", error.message); // Log error message safely
 		}
-		return internalServerErrorResponse(res)
+		return internalServerErrorResponse(res);
 	}
 };

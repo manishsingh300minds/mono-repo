@@ -2,19 +2,29 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "composite": true,
-    "module": "commonjs",        // CommonJS modules for Node.js
-    "target": "es6",             // ECMAScript 6 for modern Node.js environments
-    "lib": ["es6"],              // Include ES6 library features
-    "moduleResolution": "node",  // Resolve modules like Node.js
-    "outDir": "./dist",          // Output directory for compiled JS
-    "rootDir": "",  
-    "noEmit": false,        // Root directory for TypeScript source files
-    "esModuleInterop": true,     // Enable interoperability with CommonJS modules
-    "forceConsistentCasingInFileNames": true,  // Ensure file names are treated case-sensitively
-    "skipLibCheck": true,        // Skip checking declaration files for faster builds
-    "strict": false,               // Enable strict type-checking options
-    "types": ["node", "express"]
+    "module": "commonjs", // CommonJS modules for Node.js
+    "target": "es6", // ECMAScript 6 for modern Node.js environments
+    "lib": [
+      "es6"
+    ], // Include ES6 library features
+    "moduleResolution": "node", // Resolve modules like Node.js
+    "outDir": "./dist", // Output directory for compiled JS
+    "rootDir": "",
+    "noEmit": false, // Root directory for TypeScript source files
+    "esModuleInterop": true, // Enable interoperability with CommonJS modules
+    "forceConsistentCasingInFileNames": true, // Ensure file names are treated case-sensitively
+    "skipLibCheck": true, // Skip checking declaration files for faster builds
+    "strict": false, // Enable strict type-checking options
+    "types": [
+      "node",
+      "express"
+    ]
   },
-  "include": ["src/**/*","prisma/**/*"],
-  "exclude": ["node_modules"]    // Exclude node_modules from the compilation
+  "include": [
+    "src/**/*",
+    "db/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ] // Exclude node_modules from the compilation
 }
