@@ -19,12 +19,12 @@
       "node",
       "express",
     ],
-    "typeRoots": ["./node_modules/@types", "./types"]
+    "typeRoots": ["./node_modules/@types", "@types"]
   },
   "include": [
     "src/**/*",
     "db/**/*",
-    "types/**/*"
+    "@types/**/*"
   ],
   "exclude": [
     "node_modules"
