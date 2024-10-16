@@ -1,47 +1,83 @@
-import { Request, Response } from 'express';
-import db from '../../prisma';
-import { hash } from "@server/utils/hash";
-import { generateToken } from "@server/utils/jwt";
-
-import bcrypt from 'bcrypt';
-
-
-export const createAdmin = async (req: Request, res: Response) => {
-  const admin = await db.admin.create({
-    data: {
-      ...req.body,
-      password: hash(req.body.password)
-    }
-  });
-  res.status(201).json(admin);
-};
+import { Request, Response } from "express";
+import db from "../../prisma";
+import { hash, hashCompare } from "../utils/hash";
+import { generateToken } from "../utils/jwt";
+import {
+	errorResponseWithoutData,
+	internalServerErrorResponse,
+	successResponseData,
+} from "../utils/response";
+import { ResponseCode } from "../utils/enum";
 
 export const login = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+	const { email, password } = req.body;
 
-  try {
-    const admin = await db.admin.findUnique({
-      where: {
-        email,
-      },
-    });
+	try {
+		const admin = await db.admin.findUnique({
+			where: {
+				email,
+				active: true,
+			},
+		});
 
-    if (!admin) {
-      return res.status(400).json({ message: 'Invalid email' });
-    }
+		if (!admin) {
+			return errorResponseWithoutData({res,message: "Invalid email"});
+		}
 
-    const isPasswordValid = await bcrypt.compare(password, admin.password);
+		const is_password_valid = await hashCompare(password, admin.password);
+		if (!is_password_valid) {
+			return errorResponseWithoutData({res,message: "Invalid password"});
+		}
 
-    if (!isPasswordValid) {
-      return res.status(400).json({ message: 'Invalid password' });
-    }
+		const token = generateToken({
+			admin_id: admin.admin_id,
+			email: admin.email,
+		});
 
-    const token = generateToken({email, password})
+		return successResponseData({
+			res,
+			data: {
+				admin_id: admin.admin_id,
+				email: admin.email,
+				first_name: admin.first_name,
+				last_name: admin.last_name,
+			},
+			message: "Login Successful",
+			extras: {token}
+		});
+	} catch (error) {
+		if (error instanceof Error) {
+			console.error("Error message:", error.message); // Log error message safely
+		}
+		return internalServerErrorResponse(res)
+	}
+};
 
-    res.json({ token });
+export const createAdmin = async (req: Request, res: Response) => {
+	try {
+		const { email, password, first_name, last_name } = req.body;
+		const hashed_password = await hash(password);
 
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
-  }
+		const admin = await db.admin.create({
+			data: {
+				email,
+				password: hashed_password,
+				first_name,
+				last_name,
+			},
+			select: {
+				admin_id: true,
+				email: true,
+				first_name: true,
+				last_name: true,
+			},
+		});
+
+		return successResponseData({res, data: admin, status: ResponseCode.SUCCESS_NEW_RESOURCE});
+	} catch (error) {
+		if (error instanceof Error) {
+			console.error("Error message:", error.message); // Log error message safely
+		}
+		return internalServerErrorResponse(res)
+	}
 };
