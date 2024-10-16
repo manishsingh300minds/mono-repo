@@ -48,7 +48,7 @@ export function successResponseData({
 export function successResponseWithoutData({
 	res,
 	message,
-	status = ResponseCode.SUCCESS,
+	status = ResponseCode.SUCCESS_WITHOUT_RESPONSE,
 	code = MetaCode.SUCCESS,
 	extras
 }: ResponseDataParams) {
@@ -136,12 +136,25 @@ export function validationErrorResponseData(
 
 export function internalServerErrorResponse(
 	res,
-	status = ResponseCode.BAD_REQUEST,
+	status = ResponseCode.INTERNAL_SERVER,
 	code = MetaCode.FAIL
 ) {
 	const response = {
 		code: code,
-		message: res.__("internalError"),
+		message: "Internal server error",
+	};
+	return res.status(status).send(response);
+}
+
+export function notFoundErrorResponse(
+	res,
+	message = "Not found",
+	status = ResponseCode.NOT_FOUND,
+	code = MetaCode.FAIL
+) {
+	const response = {
+		code,
+		message
 	};
 	return res.status(status).send(response);
 }

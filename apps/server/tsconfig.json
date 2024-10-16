@@ -17,12 +17,14 @@
     "strict": false, // Enable strict type-checking options
     "types": [
       "node",
-      "express"
-    ]
+      "express",
+    ],
+    "typeRoots": ["./node_modules/@types", "./types"]
   },
   "include": [
     "src/**/*",
-    "db/**/*"
+    "db/**/*",
+    "types/**/*"
   ],
   "exclude": [
     "node_modules"
